@@ -1,0 +1,34 @@
+<!DOCTYPE html>
+<html>
+  <head>
+	<meta charset="UTF-8">
+    <title>HKGolden Notifier</title>
+    <style>
+      body {
+        min-width: 357px;
+        overflow-x: hidden;
+      }
+
+      img {
+        margin: 5px;
+        border: 2px solid black;
+        vertical-align: middle;
+        width: 75px;
+        height: 75px;
+      }
+    </style>
+    <script language='javascript' src="popup.js"></script>
+  </head>
+  <body>
+  HKGolden Notifier
+  <form name='main'>
+    <input type='button' id='BookmarkThis' value='Bookmark'>
+	<input type='button' id='RefreshAll' value='Refresh'>
+	<input type='button' id='ClearAll' value='Clear'>
+  </form>
+  <div id="BookmarksDiv">
+	<table id="BookmarksTable">
+	</table>
+  </div>
+  </body>
+</html>
