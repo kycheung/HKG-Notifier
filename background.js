@@ -1,6 +1,6 @@
 chrome.runtime.onMessage.addListener(
 	function(request, sender, sendResponse) {
-		var storage = chrome.storage.sync;
+		var storage = chrome.storage.local;
 		if (request.action == "bookmark") {
 			var url = request.url;
 			var post_id = url.match(/http:\/\/.+hkgolden\.com\/.+message=([0-9]+)/)[1];
