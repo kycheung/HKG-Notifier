@@ -86,6 +86,11 @@ function displayAll() {
 	chrome.runtime.sendMessage({"action":"query"}, function(response) {
 		result_object = response;
 		var keys = Object.keys(result_object);
+
+		if (keys.length == 0) {
+			return;
+		}
+
 		addTitle();
 		for (var i = 0; i < keys.length; i++) {
 			var key = keys[i]; 
@@ -106,8 +111,6 @@ function clearAll() {
 		while (myNode.firstChild) {
 			myNode.removeChild(myNode.firstChild);
 		}
-//		alert("All bookmarks are clear");
-		addTitle();
 	});
 }
 
@@ -118,6 +121,15 @@ function removeOne(post_id) {
 	chrome.runtime.sendMessage({"action":"removeOne", "post_id":post_id}, function(response) {
 		;
 	});
+	var post_ids = getPostIds();
+	if (post_ids.length == 0){
+		var myNode = document.getElementById("BookmarksTable");
+		while (myNode.firstChild) {
+			myNode.removeChild(myNode.firstChild);
+		}
+	}
+}
+
 // Get subscribed post ids from popup.html DOM
 function getPostIds() {
 	var post_ids = [];
