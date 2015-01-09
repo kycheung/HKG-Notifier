@@ -11,10 +11,26 @@ chrome.runtime.onMessage.addListener(
 				var title = xhr.responseText.match(/<Attribute name="title">(.*?)<\/Attribute>/)[1];
 				var last_viewed_time = xhr.responseText.match(/<Attribute name="last_update">(.*?)<\/Attribute>/)[1];
 				var num_of_replies = xhr.responseText.match(/([0-9]+).+?個回應/)[1];
-				var object = {"url":url, "title":title, "last_viewed_time":last_viewed_time, "num_of_replies":num_of_replies, "new_reply":false, "post_id":post_id};
-				obj = {}; obj[post_id] = object;
+				var object = {
+					"url":url, 
+					"title":title, 
+					"last_viewed_time":last_viewed_time, 
+					"num_of_replies":num_of_replies, 
+					"new_reply":false, 
+					"post_id":post_id
+				};
+
+				var obj = {}; 
+				obj[post_id] = object;
 				storage.set(obj, function (){
-					sendResponse({msg: title + " Bookmarked", "post_id":post_id, "title":title, "last_viewed_time":last_viewed_time, "num_of_replies":num_of_replies, "url":url});
+					sendResponse({
+						msg: title + " Bookmarked", 
+						"post_id":post_id, 
+						"title":title, 
+						"last_viewed_time":last_viewed_time, 
+						"num_of_replies":num_of_replies, 
+						"url":url
+					});
 				});
 			}
 		} else if (request.action == "query") {
@@ -41,10 +57,23 @@ chrome.runtime.onMessage.addListener(
 						var last_viewed_time = xhr.responseText.match(/<Attribute name="last_update">(.*?)<\/Attribute>/)[1];
 						var num_of_replies = xhr.responseText.match(/([0-9]+).+?個回應/)[1];
 						var new_reply;
-						if (num_of_replies != items[key].num_of_replies) {new_reply = true;} else {new_reply = items[key].new_reply;}
+						if (num_of_replies != items[key].num_of_replies) {
+							new_reply = true;
+						} else {
+							new_reply = items[key].new_reply;
+						}
+
 						console.log(new_reply);
-						var object = {"url":url, "title":title, "last_viewed_time":last_viewed_time, "num_of_replies":num_of_replies, "new_reply":new_reply, "post_id":post_id};
-						obj = {}; obj[post_id] = object;
+						var object = {
+							"url":url, 
+							"title":title, 
+							"last_viewed_time":last_viewed_time, 
+							"num_of_replies":num_of_replies, 
+							"new_reply":new_reply, 
+							"post_id":post_id
+						};
+						var obj = {}; 
+						obj[post_id] = object;
 						storage.set(obj, function (){
 							;
 						});
@@ -53,12 +82,17 @@ chrome.runtime.onMessage.addListener(
 				sendResponse({msg : "Database Updated!"});
 			});
 		} else if (request.action == "removeOne") {
-			post_id = request.post_id;
-			console.log(post_id);
+			var post_id = request.post_id;
 			storage.remove(post_id, function() {
-				sendResponse({msg : "Post " + post_id + " is removed!"});
+				sendResponse({
+					msg : "Post " + post_id + " is removed!"
+				});
 			});
 		}
 		return true;
 	}
 );
+
+// intervalID = window.setInterval(function(){
+// 	console.log("3 seconds elapsed.");
+// }, 3000);

@@ -1,7 +1,7 @@
 function addOne(post_id, title, last_view_time, num_of_replies, url, new_reply) {
 	var tr = document.createElement("tr");
 	tr.id = "row_" + post_id;
-	var td; var a; var button;
+	var td, a, button;
 	if (url == null) {
 		td = document.createElement("td");
 		td.appendChild(document.createTextNode(title));
@@ -10,7 +10,9 @@ function addOne(post_id, title, last_view_time, num_of_replies, url, new_reply) 
 		td = document.createElement("td");
 		a = document.createElement("a");
 		a.appendChild(document.createTextNode(title));
-		a.title = "Link to HKGolden Post"; a.href = url; a.target="_blank";
+		a.title = "Link to HKGolden Post"; 
+		a.href = url; 
+		a.target="_blank";
 		td.appendChild(a);
 		if (new_reply == true) {
 			var sup = document.createElement("sup");
@@ -34,14 +36,13 @@ function addOne(post_id, title, last_view_time, num_of_replies, url, new_reply) 
 	tr.appendChild(td);
 	document.getElementById("BookmarksTable").appendChild(tr);
 	document.getElementById("button_" + post_id).addEventListener('click', function () {
-		removeOne(post_id)
+		removeOne(post_id);
 	});
 }
 
 function addTitle() {
 	var tr = document.createElement("tr");
-	var td;
-	td = document.createElement("td");
+	var td = document.createElement("td");
 	td.appendChild(document.createTextNode("題目"));
 	tr.appendChild(td);
 	td = document.createElement("td");
@@ -58,7 +59,7 @@ function addTitle() {
 
 function bookmarkCurrent() {
 	chrome.tabs.query({"currentWindow" : true, active: true}, function (tabs) {
-		url = tabs[0].url;
+		var url = tabs[0].url;
 		var post_id = url.match(/http:\/\/.+hkgolden\.com\/.+message=([0-9]+)/);
 		if (post_id == null) {
 			alert("Current Tab is not a HKGolden Post!");
@@ -79,7 +80,7 @@ function bookmarkCurrent() {
 
 function refreshAll() {
 	chrome.runtime.sendMessage({"action":"refresh"}, function(response) {
-		root = document.getElementById("BookmarksTable");
+		var root = document.getElementById("BookmarksTable");
 		while (root.firstChild) {
 			root.removeChild(root.firstChild);
 		}
@@ -90,7 +91,7 @@ function refreshAll() {
 
 function displayAll() {
 	chrome.runtime.sendMessage({"action":"query"}, function(response) {
-		result_object = response;
+		var result_object = response;
 		var keys = Object.keys(result_object);
 
 		if (keys.length == 0) {
@@ -121,12 +122,11 @@ function clearAll() {
 }
 
 function removeOne(post_id) {
-	row_id = "row_" + post_id;
+	var row_id = "row_" + post_id;
 	var element = document.getElementById(row_id);
 	element.parentNode.removeChild(element);
-	chrome.runtime.sendMessage({"action":"removeOne", "post_id":post_id}, function(response) {
-		;
-	});
+	chrome.runtime.sendMessage({"action":"removeOne", "post_id":post_id}, null);
+
 	var post_ids = getPostIds();
 	if (post_ids.length == 0){
 		var myNode = document.getElementById("BookmarksTable");
@@ -156,5 +156,6 @@ document.addEventListener('DOMContentLoaded', function () {
 	document.getElementById('BookmarkThis').addEventListener('click', bookmarkCurrent);
 	document.getElementById('RefreshAll').addEventListener('click', refreshAll);
 	document.getElementById('ClearAll').addEventListener('click', clearAll);
+
 	displayAll();
 });
