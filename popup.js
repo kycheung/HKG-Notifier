@@ -118,6 +118,20 @@ function removeOne(post_id) {
 	chrome.runtime.sendMessage({"action":"removeOne", "post_id":post_id}, function(response) {
 		;
 	});
+// Get subscribed post ids from popup.html DOM
+function getPostIds() {
+	var post_ids = [];
+	var table = document.getElementById("BookmarksTable");
+	for (var i = 0; i < table.childNodes.length; i++) {
+		var cur_node = table.childNodes[i];
+		if (!cur_node || cur_node.tagName != "TR" || cur_node.id.indexOf("row_") != 0 ){
+			continue;
+		}
+
+		var post_id = cur_node.id.substr(4); // in "row_{post_id}"
+		post_ids.push(post_id);
+	}
+	return post_ids;
 }
 
 document.addEventListener('DOMContentLoaded', function () {
