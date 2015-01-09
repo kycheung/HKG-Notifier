@@ -63,10 +63,16 @@ function bookmarkCurrent() {
 		if (post_id == null) {
 			alert("Current Tab is not a HKGolden Post!");
 		} else {
-			chrome.runtime.sendMessage({"action":"bookmark", "url": url}, function(response) {
-//				alert(response.msg);
-				addOne(response.post_id, response.title, response.last_viewed_time, response.num_of_replies, response.url);
-			});
+			var existIds = getPostIds();
+			if (existIds.indexOf(post_id[1]) == -1){
+				chrome.runtime.sendMessage({"action":"bookmark", "url": url}, function(response) {
+					if (existIds.length == 0) {
+						addTitle();
+					}
+
+					addOne(response.post_id, response.title, response.last_viewed_time, response.num_of_replies, response.url);
+				});
+			}
 		}
 	});
 }
